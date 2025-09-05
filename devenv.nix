@@ -15,46 +15,24 @@
   };
 
   services = {
-    postgres = {
+    mysql = {
       enable = true;
-      # Optional: set version, database name, user, password
-      package = pkgs.postgresql_15;
+      package = pkgs.mysql80;
       initialDatabases = [{ name = "appdb"; }];
-      initialScript = ''
-        CREATE USER appuser WITH PASSWORD 'apppass';
-        GRANT ALL PRIVILEGES ON DATABASE appdb TO appuser;
-
-        \connect appdb
-        CREATE TABLE users (
-          id SERIAL PRIMARY KEY,
-          username VARCHAR(32) NOT NULL UNIQUE,
-          email VARCHAR(255) NOT NULL UNIQUE,
-          password_hash TEXT NOT NULL,
-          display_name VARCHAR(64),
-          bio TEXT,
-          avatar_url TEXT,
-          created_at TIMESTAMP DEFAULT NOW(),
-          updated_at TIMESTAMP DEFAULT NOW()
-        );
-        '';
+      ensureUsers = [
+      {
+        name = "root";
+        password = "test";
+      }
+      ];
     };
   };
 
   # Optionally, add CLI tools
   packages = with pkgs; [
     git
-    postgresql_15
-    pgcli # Optional: nice interactive CLI
+    mycli 
   ];
-
-  # Shell environment variables
-  env = {
-    PGUSER = "appuser";
-    PGDATABASE = "appdb";
-    PGHOST = "localhost";
-    PGPORT = lib.mkForce "5432";
-  };
-
 
   # https://devenv.sh/scripts/
   scripts.hello.exec = ''
