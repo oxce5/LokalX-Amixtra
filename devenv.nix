@@ -21,10 +21,29 @@
       initialDatabases = [{ name = "appdb"; }];
       ensureUsers = [
       {
-        name = "root";
+        name = "userManager";
         password = "test";
+        ensurePermissions = {
+          "userManager*" = "ALL PRIVILEGES";
+        };
       }
+      # {
+      #   name = "postmanager";
+      #   password = "test";
+      # }
+      # {
+      #   name = "messagemanager";
+      #   password = "test";
+      # }
       ];
+    };
+    rabbitmq = {
+      enable = true;
+      port = 5672;
+      managementPlugin= {
+        enable = true;
+        port = 15672;
+      };
     };
   };
 
