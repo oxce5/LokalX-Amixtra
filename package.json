@@ -1,0 +1,27 @@
+{
+  "name": "amixtra-hackathon",
+  "version": "0.0.1",
+  "description": "N/A",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oxce5/placeholder-amixtra.git"
+  },
+  "keywords": [
+    "discovery",
+    "networking",
+    "creatives"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/oxce5/placeholder-amixtra/issues"
+  },
+  "homepage": "https://github.com/oxce5/placeholder-amixtra#readme",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
