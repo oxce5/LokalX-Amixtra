@@ -140,15 +140,7 @@ export default function Home() {
             <>
               <h3 className="fw-bold mb-3">For Patrons</h3>
               <div className="row g-4 mb-5">
-                {patronSteps.map((s, idx) => (
-                  <div className="col-md-3" key={idx}>
-                    <StepCard
-                      number={idx + 1}
-                      title={s.title}
-                      description={s.description}
-                    />
-                  </div>
-                ))}
+                <img src="src/assets/for patrons.png" alt="" />
               </div>
             </>
           )}
@@ -157,15 +149,7 @@ export default function Home() {
             <>
               <h3 className="fw-bold mb-3">For Artists</h3>
               <div className="row g-4">
-                {artistSteps.map((s, idx) => (
-                  <div className="col-md-3" key={idx}>
-                    <StepCard
-                      number={idx + 1}
-                      title={s.title}
-                      description={s.description}
-                    />
-                  </div>
-                ))}
+                <img src="src/assets/for artists.png" alt="" />
               </div>
             </>
           )}

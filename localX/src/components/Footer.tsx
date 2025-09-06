@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./Footer.css";
 
 const Footer: React.FC = () => {
@@ -12,13 +13,13 @@ const Footer: React.FC = () => {
           <a href="/hire">Hire Artists</a>
           <a href="/how-it-works">How it Works</a>
         </div>
-        <div className="footer-logo">
+        <Link className="footer-logo" to="/">
             <img
             src="src/assets/logo v3.png" // Replace with your actual logo path
             alt="Lokal Logo"
             className="logo-image"
           />
-          </div>
+        </Link>
       </div>
     </footer>
   );
