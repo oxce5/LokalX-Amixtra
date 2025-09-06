@@ -2,7 +2,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const { getDbConnection } = require('../services/db');
-const { rabbitChannel, QUEUE } = require('../services/rabbitmq');
+const { getRabbitChannel, QUEUE } = require('../services/rabbitmq'); // <-- Update here
 
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET || 'your-very-secret-key';
@@ -28,9 +28,10 @@ router.post('/register', async (req, res) => {
   await conn.end();
 
   // Publish event to RabbitMQ
-  // if (rabbitChannel) {
-  //   rabbitChannel.sendToQueue(QUEUE, Buffer.from(JSON.stringify({ type: 'register', username, email })));
-  // }
+  const channel = getRabbitChannel();
+  if (channel) {
+    channel.sendToQueue(QUEUE, Buffer.from(JSON.stringify({ type: 'register', username, email })));
+  }
 
   const token = jwt.sign({ username, email }, JWT_SECRET, { expiresIn: '1h' });
   res.json({ message: 'User registered', token });
@@ -55,9 +56,10 @@ router.post('/login', async (req, res) => {
   if (!valid) return res.status(401).json({ error: 'Invalid credentials' });
 
   // Publish event to RabbitMQ
-  // if (rabbitChannel) {
-  //   rabbitChannel.sendToQueue(QUEUE, Buffer.from(JSON.stringify({ type: 'login', username })));
-  // }
+  const channel = getRabbitChannel();
+  if (channel) {
+    channel.sendToQueue(QUEUE, Buffer.from(JSON.stringify({ type: 'login', username })));
+  }
 
   const token = jwt.sign({ username: user.username, email: user.email }, JWT_SECRET, { expiresIn: '1h' });
   res.json({ token });
