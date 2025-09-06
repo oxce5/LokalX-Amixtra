@@ -2,6 +2,8 @@ import React from "react";
 import "../components/Auth.css";
 import AuthSlideshow from "../components/AuthSlideshow";
 import logo from "../assets/logo.png";
+import { Link } from "react-router-dom";
+
 
 const Login: React.FC = () => {
   return (
@@ -9,7 +11,9 @@ const Login: React.FC = () => {
       <div className="auth-form">
         {/* Logo in top-left */}
         <div className="auth-logo">
-          <img src={logo} alt="Logo" />
+        <Link to="/">
+            <img src={logo} alt="Logo" />
+        </Link>
         </div>
 
         {/* Form content */}

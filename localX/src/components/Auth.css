@@ -5,6 +5,27 @@
   overflow: hidden; 
 }
 
+.auth-credit {
+  position: absolute;
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-20%);
+  font-size: 0.65rem;
+  color: white;
+  padding: 2px 5px;
+  border-radius: 6px;
+  z-index: 3;
+
+  /* fading black background just for text */
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.7),
+    rgba(0, 0, 0, 0.4)
+  );
+}
+
+
+
 .auth-form {
   flex: 1;
   display: flex;
