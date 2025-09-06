@@ -35,13 +35,17 @@
 .artist {
   display: flex;
   align-items: flex-start;
-  gap: 0.5rem;
+  gap: 1rem;
   margin-top: 0.5rem;
 }
 
 .avatar {
-  width: 24px;
-  height: 24px;
+  width: 35px;
+  height: 35px;
   background-color: #ccc;
   border-radius: 50%;
+}
+
+.p{
+  padding-top: 5px;
 }

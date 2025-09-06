@@ -11,7 +11,7 @@ const WorkCard: React.FC<{ work: Work }> = ({ work }) => {
       <div className={styles.details}>
         <div className={styles.artist}>
           <div className={styles.avatar}></div>
-          <p>{work.artist}</p>
+          <p className={styles.p}>{work.artist}</p>
         </div>
       </div>
     </div>
