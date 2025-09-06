@@ -6,7 +6,12 @@ import SL3 from "../assets/SL3.png";
 
 const AuthSlideshow: React.FC = () => {
   return (
-    <div id="authCarousel" className="carousel slide" data-bs-ride="carousel">
+    <div
+      id="authCarousel"
+      className="carousel slide auth-slideshow"
+      data-bs-ride="carousel"
+      data-bs-interval="7000"
+    >
       <div className="carousel-inner">
         <div className="carousel-item active">
           <img src={SL1} className="d-block w-100" alt="Slide 1" />
@@ -17,6 +22,11 @@ const AuthSlideshow: React.FC = () => {
         <div className="carousel-item">
           <img src={SL3} className="d-block w-100" alt="Slide 3" />
         </div>
+      </div>
+
+      {/* Courtesy text */}
+      <div className="auth-credit">
+        © Artwork courtesy of LocalX Artists
       </div>
 
       {/* Optional navigation */}
