@@ -1,9 +1,8 @@
-import React, { useState } from "react";
-import { works as mockWorks } from "../data/works";
-import type { Work } from "../types/Work";
-import WorkCard from "../components/WorkCard/WorkCard";
+import React from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { works } from "../data/works";
 import FilterBar from "../components/FilterBar/FilterBar";
-import Footer from "../components/Footer";
+import WorkCard from "../components/WorkCard/WorkCard";
 
 const categories = [
   "Featured Works",
@@ -14,31 +13,46 @@ const categories = [
   "Design & Multimedia",
 ];
 
-const GalleryPage: React.FC = () => {
-  const [selectedCategory, setSelectedCategory] = useState("Featured Works");
+// Convert categories to URL-safe slugs
+const categoryToSlug = (name: string) =>
+  name.toLowerCase().replace(/ & /g, "-").replace(/\s+/g, "-");
 
-  const filteredWorks: Work[] =
-    selectedCategory === "Featured Works"
-      ? mockWorks
-      : mockWorks.filter((w) => w.category === selectedCategory);
+const slugToCategory = (slug: string) => {
+  return (
+    categories.find((cat) => categoryToSlug(cat) === slug) || "Featured Works"
+  );
+};
+
+const GalleryPage: React.FC = () => {
+  const { category } = useParams<{ category: string }>();
+  const navigate = useNavigate();
+
+  const currentCategory = slugToCategory(category || "featured-works");
+
+  const filteredWorks =
+    currentCategory === "Featured Works"
+      ? works
+      : works.filter((w) => w.category === currentCategory);
+
+  const handleCategorySelect = (cat: string) => {
+    const slug = categoryToSlug(cat);
+    navigate(`/gallery/${slug}`);
+  };
 
   return (
-    <>
-      <main style={{ padding: "2rem 4rem" }}>
-        <h2 style={{ marginBottom: "1rem" }}>Featured Works</h2>
-        <FilterBar
-          categories={categories}
-          activeCategory={selectedCategory}
-          onCategorySelect={setSelectedCategory}
-        />
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "2rem" }}>
-          {filteredWorks.map((work) => (
-            <WorkCard key={work.id} work={work} />
-          ))}
-        </div>
-      </main>
-      
-    </>
+    <main style={{ flex: 1, padding: "2rem 4rem" }}>
+      <h2 style={{ marginBottom: "1rem" }}>{currentCategory}</h2>
+      <FilterBar
+        categories={categories}
+        activeCategory={currentCategory}
+        onCategorySelect={handleCategorySelect}
+      />
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "2rem" }}>
+        {filteredWorks.map((work) => (
+          <WorkCard key={work.id} work={work} />
+        ))}
+      </div>
+    </main>
   );
 };
 

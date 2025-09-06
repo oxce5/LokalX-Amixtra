@@ -9,7 +9,7 @@ const Footer: React.FC = () => {
       <div className="footer-content">
         <div className="footer-links">
           <a href="/">Home</a>
-          <a href="/explore">Explore Art</a>
+          <a href="/gallery/featured-works">Explore Art</a>
           <a href="/hire">Hire Artists</a>
           <a href="/how-it-works">How it Works</a>
         </div>
