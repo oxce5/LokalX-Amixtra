@@ -2,6 +2,8 @@
 
 This document describes the available API endpoints, authentication, and example payloads for interacting with the backend server.
 
+---
+
 ## Authentication
 
 All endpoints (except `/auth/register` and `/auth/login`) require JWT authentication.  
@@ -169,29 +171,111 @@ Authorization: Bearer <token>
 
 ---
 
+### 6. Posts
+
+#### a. Get All Posts
+
+- **GET** `/posts`
+- **Optional Query:** `?by_user=username`
+- **Response:**
+    ```json
+    [
+      {
+        "id": 1,
+        "by_user": "alice",
+        "title": "Hello World",
+        "content": "This is my first post.",
+        "created_at": "2025-09-06T12:00:00.000Z",
+        "updated_at": "2025-09-06T12:00:00.000Z",
+        "edit_history": []
+      },
+      ...
+    ]
+    ```
+
+#### b. Get Single Post
+
+- **GET** `/posts/:id`
+- **Response:**
+    ```json
+    {
+      "id": 1,
+      "by_user": "alice",
+      "title": "Hello World",
+      "content": "This is my first post.",
+      "created_at": "2025-09-06T12:00:00.000Z",
+      "updated_at": "2025-09-06T12:00:00.000Z",
+      "edit_history": []
+    }
+    ```
+
+#### c. Create Post
+
+- **POST** `/posts`
+- **Headers:**  
+    `Authorization: Bearer <token>`
+- **Body:**
+    ```json
+    {
+      "title": "Hello World",
+      "content": "This is my first post."
+    }
+    ```
+- **Response:**
+    ```json
+    { "message": "Post created" }
+    ```
+
+#### d. Update Post
+
+- **PATCH** `/posts/:id`
+- **Headers:**  
+    `Authorization: Bearer <token>`
+- **Body:** (any fields to update)
+    ```json
+    {
+      "title": "Updated Title",
+      "content": "Updated content."
+    }
+    ```
+- **Response:**
+    ```json
+    { "message": "Post updated" }
+    ```
+
+#### e. Delete Post
+
+- **DELETE** `/posts/:id`
+- **Headers:**  
+    `Authorization: Bearer <token>`
+- **Response:**
+    ```json
+    { "message": "Post deleted" }
+    ```
+
+---
+
 ## Notes
 
 - All responses are JSON.
 - All errors return `{ "error": "..." }` with appropriate HTTP status codes.
-- The `marketProducts` and `biddingProducts` fields are arrays of objects, each with a `status` property (e.g., `"active"`, `"archived"`).
+- The `edit_history` field in posts is an array of previous versions.
 
 ---
 
 ## Example JS Fetch Usage
 
 ```js
-// Example: POST new user content
-fetch('http://localhost:3000/user-content', {
+// Create a post example
+fetch('http://localhost:3000/posts', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
     'Authorization': `Bearer ${token}`
   },
   body: JSON.stringify({
-    marketProducts: [ { title: "Lamp", imageUrl: "lamp.jpg", status: "active" } ],
-    biddingProducts: [ { title: "Poster", content: "Signed", imageUrl: "poster.jpg", status: "archived" } ],
-    description: "My first content",
-    tags: ["art", "sale"]
+    title: "Hello World",
+    content: "This is my first post."
   })
 });
 ```
