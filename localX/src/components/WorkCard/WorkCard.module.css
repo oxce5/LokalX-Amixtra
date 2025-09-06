@@ -1,0 +1,37 @@
+.card {
+  background: #f3f3f3;
+  border-radius: 8px;
+  overflow: hidden;
+  width: 240px;
+}
+
+.image {
+  height: 180px;
+  background-size: cover;
+  background-position: center;
+  border-bottom: 3px solid black;
+}
+
+.details {
+  padding: 0.75rem;
+}
+
+.details h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.artist {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.avatar {
+  width: 24px;
+  height: 24px;
+  background-color: #ccc;
+  border-radius: 50%;
+}
