@@ -1,7 +1,6 @@
 import Hero from "../components/Hero";
 import WorkCard from "../components/WorkCard";
 import FeatureCard from "../components/FeatureCard";
-import StepCard from "../components/StepCard";
 import Footer from "../components/Footer"
 import { useState } from "react";
 
