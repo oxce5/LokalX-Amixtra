@@ -14,6 +14,7 @@
     };
   };
 
+  # TODO remove these, we will be moving to cloud
   services = {
     mysql = {
       enable = true;
@@ -50,7 +51,7 @@
   # Optionally, add CLI tools
   packages = with pkgs; [
     git
-    mycli 
+    mycli # 
   ];
 
   # https://devenv.sh/scripts/
