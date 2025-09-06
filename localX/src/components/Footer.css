@@ -1,0 +1,71 @@
+.footer {
+  background-color: #121212;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+.footer-gradient {
+  position: relative;
+  height: 100px;
+  background: linear-gradient(to right, #94bfff, #b1e9c2, #f5eea3, #f9c8a0, #fca3a3);
+  overflow: hidden;
+}
+
+.footer-gradient::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(to top, transparent 0%, white 100%);
+  pointer-events: none;
+}
+
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem 4rem;
+  flex-wrap: wrap;
+}
+
+.footer-links {
+  display: flex;
+  gap: 2rem;
+}
+
+.footer-links a {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
+}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.logo-text {
+  text-align: right;
+}
+
+.logo-text strong {
+  font-size: 24px;
+}
+
+.logo-text p {
+  font-size: 12px;
+  margin: 0;
+}
+
+.logo-image {
+  width: auto;
+  height: 70px;
+}

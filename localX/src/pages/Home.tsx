@@ -1,0 +1,114 @@
+import Hero from "../components/Hero";
+import WorkCard from "../components/WorkCard";
+import FeatureCard from "../components/FeatureCard";
+import Footer from "../components/Footer"
+import { useState } from "react";
+
+
+export default function Home() {
+  const [selectedRole, setSelectedRole] = useState<"patron" | "artist">("patron");
+
+  const featuredWorks = [
+    { title: "Sunset Over Mt. Apo", artist: "Juan D.", imageUrl: "" },
+    { title: "Harvest Dance", artist: "Maria L.", imageUrl: "" },
+    { title: "Lumad Dreams", artist: "Carlos P.", imageUrl: "" },
+  ];
+
+  return (
+    <>
+      <Hero />
+
+      {/* Featured Works */}
+      <section className="py-5">
+        <div className="container">
+          <h2 className="mb-4 fw-bold">Featured Works</h2>
+          <div className="row g-4">
+            {featuredWorks.map((work, idx) => (
+              <div className="col-md-4" key={idx}>
+                <WorkCard {...work} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* See What Our Artists Offer */}
+      <section className="py-5 bg-light">
+        <div className="container text-center">
+          <h2 className="fw-bold mb-3">See What Our Artists Offer</h2>
+          <p className="text-muted mb-4">
+            Commission custom work, book talent for events, or collect ready-made
+            pieces — all in one place.
+          </p>
+          <div className="row g-4 justify-content-center">
+            <div className="col-md-4">
+              <FeatureCard
+                title="COMMISSION"
+                description="Post a request or contact an artist to create something just for you."
+              />
+            </div>
+            <div className="col-md-4">
+              <FeatureCard
+                title="SHOP"
+                description="Browse finished pieces, crafts, and merch available for immediate purchase."
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works */}
+      <section className="py-5">
+        <div className="container text-center">
+          <h2 className="fw-bold mb-4">How It Works</h2>
+          <div className="mb-4">
+            <button
+              className="btn me-2"
+              style={{
+                backgroundColor: selectedRole === "artist" ? "#B6B6B6" : "transparent",
+                border: "1px solid #B6B6B6",
+                color: selectedRole === "artist" ? "#000" : "#000",
+              }}
+              onClick={() => setSelectedRole("artist")}
+            >
+              I’m an Artist
+            </button>
+            <button
+              className="btn"
+              style={{
+                backgroundColor: selectedRole === "patron" ? "#B6B6B6" : "transparent",
+                border: "1px solid #B6B6B6",
+                color: selectedRole === "patron" ? "#000" : "#000",
+              }}
+              onClick={() => setSelectedRole("patron")}
+            >
+              I’m a Patron
+            </button>
+          </div>
+
+        </div>
+
+        <div className="container">
+          {selectedRole === "patron" && (
+            <>
+              <h3 className="fw-bold mb-3">For Patrons</h3>
+              <div className="row g-4 mb-5">
+                <img src="src/assets/for patrons.png" alt="" />
+              </div>
+            </>
+          )}
+
+          {selectedRole === "artist" && (
+            <>
+              <h3 className="fw-bold mb-3">For Artists</h3>
+              <div className="row g-4">
+                <img src="src/assets/for artists.png" alt="" />
+              </div>
+            </>
+          )}
+        </div>
+      </section>
+      <Footer/>
+    </>
+  );
+}
