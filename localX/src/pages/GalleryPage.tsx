@@ -60,7 +60,7 @@ const GalleryPage: React.FC = () => {
       />
     </div>
 
-    <div style={{ display: "flex", flexWrap: "wrap", gap: "2rem", alignItems: "center" }}>
+    <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem", alignItems: "center" }}>
       {filteredWorks.map((work) => (
         <WorkCard key={work.id} work={work} />
       ))}
