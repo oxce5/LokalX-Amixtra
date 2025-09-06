@@ -1,294 +1,182 @@
-# API Documentation for Frontend Developers
+# Amixtra Hackathon Backend
 
-This document describes the available API endpoints, authentication, and example payloads for interacting with the backend server.
+Backend for user authentication, profiles, content, posts, and real-time messaging using MySQL and RabbitMQ.
+
+## Features
+
+- **User authentication** (register/login with JWT)
+- **Profile management** (view/update display name and bio)
+- **User content management** (CRUD for user_content)
+- **Posts endpoint** (see routes/posts.js)
+- **Messaging system:**  
+  - Send messages via REST API  
+  - Real-time delivery via WebSocket, powered by RabbitMQ
 
 ---
 
-## Authentication
+## Setup
 
-All endpoints (except `/auth/register` and `/auth/login`) require JWT authentication.  
-Include the token in the `Authorization` header:
+### Prerequisites
 
-```
-Authorization: Bearer <token>
-```
+- Node.js >= 18
+- MySQL
+- RabbitMQ
+- Nix (optional, for reproducible environment)
 
----
+### Environment Setup (recommended: [devenv.sh](https://devenv.sh/))
 
-## Endpoints
+Your `devenv.nix` will provide MySQL and RabbitMQ out of the box.
 
-### 1. Register
+### Manual setup
 
-- **POST** `/auth/register`
-- **Body:**
-    ```json
-    {
-      "username": "alice",
-      "email": "alice@example.com",
-      "password": "password123"
-    }
+1. Install dependencies:
+    ```sh
+    npm install
     ```
-- **Response:**
-    ```json
-    {
-      "message": "User registered",
-      "token": "<jwt>"
-    }
+2. Create a `.env` file with (or set environment variables):
+    ```
+    JWT_SECRET=your-very-secret-key
+    DB_HOST=127.0.0.1
+    DB_USER=userManager
+    DB_PASSWORD=test
+    DB_NAME=appdb
+    RABBIT_URL=amqp://guest:guest@localhost:5672
+    RABBIT_QUEUE=user-events
     ```
 
 ---
+
+## Running
+
+```sh
+node private/entrypoint.js
+```
+
+- REST API runs on [http://localhost:3000](http://localhost:3000)
+- WebSocket server runs at `ws://localhost:3000` (see below)
+
+---
+
+## REST API
+
+### Auth
+
+- **POST /auth/register**  
+  `{ username, email, password }`  
+  Returns: `{ message, token }`
+
+- **POST /auth/login**  
+  `{ username, password }`  
+  Returns: `{ token }`
+
+### Profile
+
+- **GET /profile**  
+  Requires: `Authorization: Bearer <token>`
+- **PATCH /profile**  
+  `{ displayName?, bio? }`
+
+### User Content
+
+- **GET /user-content**
+- **POST /user-content**
+- **PATCH /user-content/:id**
+- **DELETE /user-content/:id`
+  (see code for payload structure, requires JWT)
+
+### Messaging
+
+- **POST /messages**  
+  Requires: `Authorization: Bearer <token>`  
+  `{ to, message }`  
+  Sends a message to another user (delivered in real-time if they are connected).
+
+---
+
+## Real-Time Messaging
+
+### How it works
+
+- Messages are sent via `/messages` endpoint and published to RabbitMQ.
+- WebSocket server listens on `ws://localhost:3000?token=JWT_HERE`.
+- When a user is connected via WebSocket, any messages addressed to them are delivered instantly.
+
+### Connecting from frontend or CLI
+
+Use [websocat](https://github.com/vi/websocat) or any WebSocket client.
+
+```sh
+websocat "ws://localhost:3000?token=YOUR_JWT_TOKEN"
+```
+
+You will receive JSON messages like:
+```json
+{
+  "type": "user-message",
+  "from": "alice",
+  "to": "bob",
+  "message": "Hello Bob!",
+  "sentAt": "2025-09-06T15:19:21.000Z"
+}
+```
+
+---
+
+## Example Usage
+
+### 1. Register Users
+
+```sh
+curl -X POST http://localhost:3000/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"username":"alice","email":"alice@example.com","password":"password123"}'
+```
 
 ### 2. Login
 
-- **POST** `/auth/login`
-- **Body:**
-    ```json
-    {
-      "username": "alice",
-      "password": "password123"
-    }
-    ```
-- **Response:**
-    ```json
-    {
-      "token": "<jwt>"
-    }
-    ```
+```sh
+curl -X POST http://localhost:3000/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"username":"alice","password":"password123"}'
+```
+- Copy the `"token"` from the response.
 
----
+### 3. Send a Message
 
-### 3. Get Profile
+```sh
+curl -X POST http://localhost:3000/messages \
+  -H "Authorization: Bearer ALICE_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"to":"bob","message":"Hello Bob!"}'
+```
 
-- **GET** `/profile`
-- **Headers:**  
-    `Authorization: Bearer <token>`
-- **Response:**
-    ```json
-    {
-      "username": "alice",
-      "email": "alice@example.com",
-      "displayName": "Alice",
-      "bio": "Hello world"
-    }
-    ```
+### 4. Receive Message
 
----
+Connect as "bob" using websocat or similar:
 
-### 4. Update Profile
-
-- **PATCH** `/profile`
-- **Headers:**  
-    `Authorization: Bearer <token>`
-- **Body:** (one or both fields)
-    ```json
-    {
-      "displayName": "Alice",
-      "bio": "I like cats"
-    }
-    ```
-- **Response:**
-    ```json
-    { "message": "Profile updated" }
-    ```
-
----
-
-### 5. User Content
-
-#### a. Get All Content
-
-- **GET** `/user-content`
-- **Headers:**  
-    `Authorization: Bearer <token>`
-- **Response:**
-    ```json
-    [
-      {
-        "id": 1,
-        "username": "alice",
-        "market_products": [ ... ],
-        "bidding_products": [ ... ],
-        "description": "...",
-        "tags": [ ... ],
-        "created_at": "...",
-        "updated_at": "..."
-      },
-      ...
-    ]
-    ```
-
-#### b. Create Content
-
-- **POST** `/user-content`
-- **Headers:**  
-    `Authorization: Bearer <token>`
-- **Body:**
-    ```json
-    {
-      "marketProducts": [
-        { "title": "Lamp", "imageUrl": "lamp.jpg", "status": "active" }
-      ],
-      "biddingProducts": [
-        { "title": "Poster", "content": "Signed", "imageUrl": "poster.jpg", "status": "archived" }
-      ],
-      "description": "My first content",
-      "tags": ["art", "sale"]
-    }
-    ```
-- **Response:**
-    ```json
-    { "message": "Content created" }
-    ```
-
-#### c. Update Content
-
-- **PATCH** `/user-content/:id`
-- **Headers:**  
-    `Authorization: Bearer <token>`
-- **Body:** (any fields to update)
-    ```json
-    {
-      "marketProducts": [ ... ],
-      "biddingProducts": [ ... ],
-      "description": "...",
-      "tags": [ ... ]
-    }
-    ```
-- **Response:**
-    ```json
-    { "message": "Content updated" }
-    ```
-
-#### d. Delete Content
-
-- **DELETE** `/user-content/:id`
-- **Headers:**  
-    `Authorization: Bearer <token>`
-- **Response:**
-    ```json
-    { "message": "Content deleted" }
-    ```
-
----
-
-### 6. Posts
-
-#### a. Get All Posts
-
-- **GET** `/posts`
-- **Optional Query:** `?by_user=username`
-- **Response:**
-    ```json
-    [
-      {
-        "id": 1,
-        "by_user": "alice",
-        "title": "Hello World",
-        "content": "This is my first post.",
-        "created_at": "2025-09-06T12:00:00.000Z",
-        "updated_at": "2025-09-06T12:00:00.000Z",
-        "edit_history": []
-      },
-      ...
-    ]
-    ```
-
-#### b. Get Single Post
-
-- **GET** `/posts/:id`
-- **Response:**
-    ```json
-    {
-      "id": 1,
-      "by_user": "alice",
-      "title": "Hello World",
-      "content": "This is my first post.",
-      "created_at": "2025-09-06T12:00:00.000Z",
-      "updated_at": "2025-09-06T12:00:00.000Z",
-      "edit_history": []
-    }
-    ```
-
-#### c. Create Post
-
-- **POST** `/posts`
-- **Headers:**  
-    `Authorization: Bearer <token>`
-- **Body:**
-    ```json
-    {
-      "title": "Hello World",
-      "content": "This is my first post."
-    }
-    ```
-- **Response:**
-    ```json
-    { "message": "Post created" }
-    ```
-
-#### d. Update Post
-
-- **PATCH** `/posts/:id`
-- **Headers:**  
-    `Authorization: Bearer <token>`
-- **Body:** (any fields to update)
-    ```json
-    {
-      "title": "Updated Title",
-      "content": "Updated content."
-    }
-    ```
-- **Response:**
-    ```json
-    { "message": "Post updated" }
-    ```
-
-#### e. Delete Post
-
-- **DELETE** `/posts/:id`
-- **Headers:**  
-    `Authorization: Bearer <token>`
-- **Response:**
-    ```json
-    { "message": "Post deleted" }
-    ```
-
----
-
-## Notes
-
-- All responses are JSON.
-- All errors return `{ "error": "..." }` with appropriate HTTP status codes.
-- The `edit_history` field in posts is an array of previous versions.
-
----
-
-## Example JS Fetch Usage
-
-```js
-// Create a post example
-fetch('http://localhost:3000/posts', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${token}`
-  },
-  body: JSON.stringify({
-    title: "Hello World",
-    content: "This is my first post."
-  })
-});
+```sh
+websocat "ws://localhost:3000?token=BOB_TOKEN"
 ```
 
 ---
 
-## Troubleshooting
+## Dev/Debug
 
-- If you change backend code, always restart the server (`kill` then `node private/entrypoint.js`).
-- If you get a `"Database error"`, check the backend server logs for the real error.
+- To see all RabbitMQ messages, run:
+    ```sh
+    node private/services/rabbitmq-consumer.js
+    ```
+- All backend logs will print to stdout.
 
 ---
 
-## Contact
+## Extending
 
-For any issues or questions, contact the backend developer.
+- Add more event types as needed to the messaging or RabbitMQ layers.
+- You can persist messages in the database by modifying `private/routes/messages.js`.
+
+---
+
+## License
+
+MIT
