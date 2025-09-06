@@ -1,0 +1,15 @@
+.navbar-accent {
+  height: 4px;
+  background: linear-gradient(
+    to right,
+    #DA171C, /* red */
+    #D8D33A, /* yellow */
+    #2CA063, /* green */
+    #2586E8 /* blue */
+  );
+}
+
+#navbar{
+  height: 80px;
+  
+}
