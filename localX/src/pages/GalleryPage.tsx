@@ -40,19 +40,33 @@ const GalleryPage: React.FC = () => {
   };
 
   return (
-    <main style={{ flex: 1, padding: "2rem 4rem" }}>
-      <h2 style={{ marginBottom: "1rem" }}>{currentCategory}</h2>
+    <main style={{ flex: 1, padding: "2rem 13.2rem" }}>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "flex-start",
+        alignContent: "center",
+        marginBottom: "1.5rem",
+        flexWrap: "wrap",
+        gap: "1rem"
+      }}
+    >
+      <h2 style={{ margin: 0 }}>{currentCategory}</h2>
       <FilterBar
         categories={categories}
         activeCategory={currentCategory}
         onCategorySelect={handleCategorySelect}
       />
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "2rem" }}>
-        {filteredWorks.map((work) => (
-          <WorkCard key={work.id} work={work} />
-        ))}
-      </div>
-    </main>
+    </div>
+
+    <div style={{ display: "flex", flexWrap: "wrap", gap: "2rem", alignItems: "center" }}>
+      {filteredWorks.map((work) => (
+        <WorkCard key={work.id} work={work} />
+      ))}
+    </div>
+  </main>
+
   );
 };
 
