@@ -14,52 +14,6 @@ export default function Home() {
     { title: "Lumad Dreams", artist: "Carlos P.", imageUrl: "" },
   ];
 
-  const patronSteps = [
-    {
-      title: "Browse & Discover",
-      description:
-        "Pick a category — visual arts, music, dance & performance, literary arts, and design & multimedia.",
-    },
-    {
-      title: "Post a Request",
-      description:
-        "Can’t find exactly what you’re looking for? Post a request describing what you need, and artists can respond.",
-    },
-    {
-      title: "Hire or Purchase",
-      description:
-        "Once you’ve found the right artist or artwork, agree on the details and complete the transaction directly with them.",
-    },
-    {
-      title: "Enjoy & Support Lokal Art!",
-      description:
-        "Enjoy your new artwork or experience, knowing you’re helping Mindanao’s creative community grow.",
-    },
-  ];
-
-  const artistSteps = [
-    {
-      title: "Create Your Profile",
-      description:
-        "Sign up, add your bio, location, and showcase images of your best work.",
-    },
-    {
-      title: "Upload Your Works",
-      description:
-        "Categorize and display your artworks so patrons can easily browse and discover what you offer.",
-    },
-    {
-      title: "Respond to Requests",
-      description:
-        "Check for new project requests posted by patrons, and reach out if you can create what they need.",
-    },
-    {
-      title: "Get Hired or Sell Your Work",
-      description:
-        "Agree on details directly with patrons, complete the work or arrange delivery, and build your reputation.",
-    },
-  ];
-
   return (
     <>
       <Hero />
