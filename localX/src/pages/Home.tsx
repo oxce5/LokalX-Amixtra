@@ -1,7 +1,6 @@
 import Hero from "../components/Hero";
 import WorkCard from "../components/WorkCard";
 import FeatureCard from "../components/FeatureCard";
-import Footer from "../components/Footer"
 import { useState } from "react";
 
 
@@ -108,7 +107,6 @@ export default function Home() {
           )}
         </div>
       </section>
-      <Footer/>
     </>
   );
 }

@@ -12,7 +12,7 @@ export default function Hero() {
           hire, or collect their work.
         </p>
         <div className="d-flex justify-content-center gap-3">
-          <Link to="/buy-artworks" className="btn btn-dark btn-lg">
+          <Link to="/gallery/featured-works" className="btn btn-dark btn-lg">
             Browse Works
           </Link>
           <Link to="/signup" className="btn btn-outline-dark btn-lg">

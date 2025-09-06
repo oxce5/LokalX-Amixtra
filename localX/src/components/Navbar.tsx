@@ -38,12 +38,12 @@ export default function Navbar() {
                 Explore Art
               </a>
               <ul className="dropdown-menu" aria-labelledby="exploreDropdown">
-                <li><Link className="dropdown-item" to="/featured-works">Featured Works</Link></li>
-                <li><Link className="dropdown-item" to="/visual-arts">Visual Arts</Link></li>
-                <li><Link className="dropdown-item" to="/music">Music</Link></li>
-                <li><Link className="dropdown-item" to="/dance-performance">Dance & Performance</Link></li>
-                <li><Link className="dropdown-item" to="/literary-arts">Literary Arts</Link></li>
-                <li><Link className="dropdown-item" to="/design-multimedia">Design & Multimedia</Link></li>
+                <li><Link className="dropdown-item" to="/gallery/featured-works">Featured Works</Link></li>
+                <li><Link className="dropdown-item" to="/gallery/visual-arts">Visual Arts</Link></li>
+                <li><Link className="dropdown-item" to="/gallery/music">Music</Link></li>
+                <li><Link className="dropdown-item" to="/gallery/dance-performance">Dance & Performance</Link></li>
+                <li><Link className="dropdown-item" to="/gallery/literary-arts">Literary Arts</Link></li>
+                <li><Link className="dropdown-item" to="/gallery/design-multimedia">Design & Multimedia</Link></li>
               </ul>
             </li>
 
