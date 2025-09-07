@@ -43,26 +43,31 @@ router.post('/login', async (req, res) => {
   try {
     conn = await getDbConnection();
   } catch (error) {
-    return res.status(500).json({ error: 'Internal server error' });
+    // Add error debug for dev
+    return res.status(500).json({ error: error.message, stack: error.stack });
   }
 
-  const [rows] = await conn.execute('SELECT * FROM users WHERE username = ?', [username]);
-  await conn.end();
+  try {
+    const [rows] = await conn.execute('SELECT * FROM users WHERE username = ?', [username]);
+    await conn.end();
 
-  if (rows.length === 0) return res.status(401).json({ error: 'Invalid credentials' });
+    if (rows.length === 0) return res.status(401).json({ error: 'Invalid credentials' });
 
-  const user = rows[0];
-  const valid = await bcrypt.compare(password, user.password_hash);
-  if (!valid) return res.status(401).json({ error: 'Invalid credentials' });
+    const user = rows[0];
+    const valid = await bcrypt.compare(password, user.password_hash);
+    if (!valid) return res.status(401).json({ error: 'Invalid credentials' });
 
-  // Publish event to RabbitMQ
-  const channel = getRabbitChannel();
-  if (channel) {
-    channel.sendToQueue(QUEUE, Buffer.from(JSON.stringify({ type: 'login', username })));
+    const channel = getRabbitChannel();
+    if (channel) {
+      channel.sendToQueue(QUEUE, Buffer.from(JSON.stringify({ type: 'login', username })));
+    }
+
+    const token = jwt.sign({ username: user.username, email: user.email }, JWT_SECRET, { expiresIn: '1h' });
+    res.json({ token });
+  } catch (err) {
+    // Add error debug for dev
+    return res.status(500).json({ error: err.message, stack: err.stack });
   }
-
-  const token = jwt.sign({ username: user.username, email: user.email }, JWT_SECRET, { expiresIn: '1h' });
-  res.json({ token });
 });
 
 module.exports = router;
