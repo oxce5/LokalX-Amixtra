@@ -4,6 +4,17 @@
   # https://devenv.sh/basics/
   env.GREET = "devenv";
 
+  processes.backend = {
+    exec = "node private/entrypoint.js";
+    process-compose = {
+      availability = {
+        backoff_seconds = 2;
+        max_restarts = 5;
+        restart = "on_failure";
+      };
+    };
+  };
+
   # https://devenv.sh/processes/
   # processes.cargo-watch.exec = "cargo-watch";
   languages.javascript = {
@@ -14,7 +25,6 @@
     };
   };
 
-  # TODO remove these, we will be moving to cloud
   services = {
     mysql = {
       enable = true;
@@ -28,14 +38,6 @@
           "userManager*" = "ALL PRIVILEGES";
         };
       }
-      # {
-      #   name = "postmanager";
-      #   password = "test";
-      # }
-      # {
-      #   name = "messagemanager";
-      #   password = "test";
-      # }
       ];
     };
     rabbitmq = {
@@ -47,6 +49,7 @@
       };
     };
   };
+
 
   # Optionally, add CLI tools
   packages = with pkgs; [
