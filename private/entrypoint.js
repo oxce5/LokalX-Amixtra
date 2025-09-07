@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const http = require('http');
+const cors = require('cors'); 
 
 const authRoutes = require('./routes/auth');
 const profileRoutes = require('./routes/profile');
@@ -10,6 +11,7 @@ const messagesRoutes = require('./routes/messages');
 const messageWS = require('./services/message-ws');  
 
 const app = express();
+app.use(cors()); 
 app.use(bodyParser.json());
 
 app.use('/auth', authRoutes);
